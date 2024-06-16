@@ -5,20 +5,24 @@
 #define MAX_VUELOS 5
 #define TODAS_LAS_VARIABLES "%d %d %d %d %d %v", &dp1, &dp2, &ap1, &ap2, &desperfectos, &maxVuelos
 void inicializarVariables(const char *formato, ...);
-int validarOpc(char opc){
-    char str[2];
-    str[0]=opc;
-    str[1]='\0';
-    int opcion=atoi(str);
-    return (opc>='0'&&opc<='9') ? opcion:-1;
+int validarOpc(const char *str){
+    int opc;
+    if(str[0]>='0' && str[0]<='9'){
+      return opc=atoi(str);
+   }else{
+      printf("OPCIÓN INVÁLIDA! \n");
+      return -1;
+    }
     
 }
 void takeoff(int *p1, int *p2, int *inci, int *maxVuelos){
     int pista;
     char opc;
+    char opcion[5];
 
     printf("Ingrese número de pista \n");
-    scanf("%d", &pista);
+    scanf("%s",opcion);
+    pista=validarOpc(opcion);
     if(pista==1){
         (*p1)++;
         (*maxVuelos)--;
@@ -42,8 +46,10 @@ void takeoff(int *p1, int *p2, int *inci, int *maxVuelos){
 void landing(int *p1, int *p2, int *inci, int *maxVuelos){
     int pista;
     char opc;
+    char opcion[5];
     printf("Ingrese el número de pista \n");
-    scanf("%d", &pista);
+    scanf("%s", opcion);
+    pista=validarOpc(opcion);  
     if(pista==1){
         (*p1)++;
         (*maxVuelos)--;
@@ -89,12 +95,12 @@ void imprimirMasDespegues(int dp1,int dp2){
     int totalDespegues=sumarDespegues(dp1,dp2);
     if(totalDespegues){
         if(pista){
-            printf("La pista con más despegues en el día es pista %d\n",pista);
+            printf("**\tLa pista con más despegues en el día es pista %d\n",pista);
         }else{
-            printf("Ambas pistas tuvieron la misma cantidad de despegues\n");
+            printf("**\tAmbas pistas tuvieron la misma cantidad de despegues\n");
         }
     }else{
-        printf("No se registró nigún despegue en el día\n");
+        printf("**\tNo se registró nigún despegue en el día\n");
     }
 }
 void imprimirInforme(int ap1, int ap2, int dp1, int dp2, int inci){
@@ -103,13 +109,13 @@ void imprimirInforme(int ap1, int ap2, int dp1, int dp2, int inci){
     int totalVuelos=sumarVuelos(ap1,ap2,dp1,dp2);
     int pistaMasDespegues=masDespegues(dp1,dp2);
     float vuelosSinIncidentes=porcentaje(inci);
-    printf("\n\n*********INFORME DEL DÍA**********\n\n");
-    printf("Cantidad total de vuelos en el día: %d\n", totalVuelos);
-    printf("Cantidad total de despegues en el día: %d\n", totalDespegues);
-    printf("Cantidad total de aterrizajes en el día: %d\n", totalAterrizajes);
-    printf("El porcentaje de vuelos sin desperfectos es del %.2f%%\n", vuelosSinIncidentes);
+    printf("\n************************INFORME DEL DÍA***********************************\n\n");
+    printf("**\tCantidad total de vuelos en el día: %d\n", totalVuelos);
+    printf("**\tCantidad total de despegues en el día: %d\n", totalDespegues);
+    printf("**\tCantidad total de aterrizajes en el día: %d\n", totalAterrizajes);
+    printf("**\tEl porcentaje de vuelos sin desperfectos es del %.2f%%\n", vuelosSinIncidentes);
     imprimirMasDespegues(dp1,dp2);
-    printf("\n**********FIN DEL INFORME**********\n\n");
+    printf("\n************************FIN DEL INFORME**********************************\n\n");
     
 }
 
@@ -117,14 +123,16 @@ int main()
 {
     int dp1, dp2, ap1, ap2, desperfectos, maxVuelos;
     int opc;
+    char opcion[5];
     inicializarVariables(TODAS_LAS_VARIABLES);
     while(true){
         while(maxVuelos){
-        printf("***************%d**********************\n", maxVuelos);
-        printf("1 - Despegue\n");
-        printf("2 - Aterrizaje\n");
-        printf("*************************************\n");
-        scanf(" %d", &opc);
+        printf("***************[%d]********************\n", maxVuelos);
+        printf("**\t1 -Despegue                 **\n");
+        printf("**\t2 -Aterrizaje               **\n");
+        printf("**************************************\n");
+        scanf(" %s", opcion);
+        opc=validarOpc(opcion);
         switch(opc){
             case 1:
                 takeoff(&dp1, &dp2,&desperfectos, &maxVuelos);
@@ -146,11 +154,12 @@ int main()
     }
     opc=0;
     printf("\n*************************************\n");
-    printf("1 - Ver informe del dia\n");
-    printf("2 - Comenzar nuevo día \n");
-    printf("3 - Salir\n");
+    printf("**\t1 - Ver informe del día.   **\n");
+    printf("**\t2 - Comenzar nuevo día.    **\n");
+    printf("**\t3 - Salir.                 **\n");
     printf("*************************************\n");
-    scanf(" %d", &opc);
+    scanf(" %s",opcion);
+    opc=validarOpc(opcion);
     switch(opc){
         case 1:
             imprimirInforme(ap1,ap2,dp1,dp2,desperfectos);
